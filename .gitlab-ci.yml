@@ -3,10 +3,16 @@ image: docker:latest
 services:
   - docker:dind
 
+# Docker Dind fix (https://gitlab.com/gitlab-org/gitlab-runner/issues/4501#note_194648457)
+variables:
+  DOCKER_TLS_CERTDIR: ""
+
 build:
   stage: build
   tags:
     - privileged
+  services:
+    - docker:dind
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_PIPELINE_ID" .
