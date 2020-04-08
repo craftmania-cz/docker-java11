@@ -1,0 +1,22 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish Docker Image to GPR
+        uses: machine-learning-apps/gpr-docker-publish@master
+        id: docker
+        with:
+          IMAGE_NAME: 'docker-java11'
+          TAG: 'latest'
+          DOCKERFILE_PATH: 'Dockerfile'
+          BUILD_CONTEXT: './'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
